@@ -1,0 +1,19 @@
+import serial
+def readRFID():
+    ser=serial.Serial("/dev/ttyUSB0")
+    ser.baudrate(9600)
+    data=ser.read()
+    ser.close()
+    return data
+
+
+
+while True:
+    data=readRFID()
+    print(data)
+    if data=="213123":
+        print("assse")
+    elif data=="dasdsad":
+        print("asdsad")
+    else:
+        print('sadasdasd')

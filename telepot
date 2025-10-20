@@ -1,0 +1,38 @@
+import telepot
+import sys
+from time import sleep
+import RPi.GPIO as GPIO
+
+def on(pin):
+    GPIO.output(pin,GPIO.HIGH)
+def off(pin):
+    GPIO.output(pin,GPIO.LOW)
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(21,GPIO.OUT,initial=GPIO.LOW)
+
+
+def handle(botid):
+    chat_id=botid['chat']['id']#chat id is required wheneever we send the message ie use sendMessage()
+    message=botid['text']#fetch the message sent by user on telegram\
+    if message=='on':
+        on(21)
+        bot.sendMessage(chat_id,"On")
+    elif message=='off':
+        off(21)
+        bot.sendMessage(chat_id,"off")
+
+bot=telepot.Bot('sadsad')
+bot.message_loop(handle)#checks for the update all the time and call the handle function if it''s get update
+print("im listening")
+
+try:
+        while True:
+            sleep(1)
+except KeyboardInterrupt:
+        print("program interpreted")
+        
+except:
+        print("Other exception occured")
+finally:
+        GPIO.cleanup()
+        sys.exit()

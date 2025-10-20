@@ -1,0 +1,31 @@
+import time
+import board
+import busio
+import adafruit_ads1x15.ads1115 as ADS #setting for ads1115
+from adafriut_ads1x155.analog_in import AnalogIn #reading for ads1115
+import matplotlib.pyplot as plt
+
+I2c=busio.i2c(board.SCL,board.SDA)#open i2c connection for use
+ads=ADS.ADS1115(I2c)#It creates a Python object (ads) that represents and controls the physical ADS1115 chip connected to the I²C bus.
+
+chan=AnalogIn(ads,ADS.P0)#read channel
+values=[]
+plt.ion()#interactive on
+fig,ax = plt.subplots()
+
+while True:
+    value=chan.value
+    voltage=chan.voltage
+    print(f"channel0:{value}/voltage:{voltage:.3f}v")
+    values.append(voltage)
+    if len(values)>50:
+        values.pop(0)
+        ax.clear()
+        ax.plot(values)
+        ax.set_title("ADS1115 Live Voltage")
+        ax.set_ylabel("VOLTAGE(V)")
+        ax.set_ylim(0,5)
+        ax.gird(True)
+        plt.draw()
+        plt.pause(0.1)
+time.sleep(1)

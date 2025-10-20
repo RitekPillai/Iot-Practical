@@ -1,0 +1,41 @@
+import telepot
+import sys
+from time import sleep
+import RPi.GPIO as GPIO
+
+def on(pin):
+    GPIO.output(pin,GPIO.HIGH)
+def off(pin):
+    GPIO.output(pin,GPIO.LOW)
+
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(5,GPIO.OUT,initial=GPIO.LOW)
+
+
+def handle(bot):
+    chat_id=bot['chat']['id']
+    message=bot['text']
+    
+    if message=='on':
+        on(5)
+        bot.sendMessage(chat_id,"ON")
+    elif message=='Of':
+        off(5)
+        bot.sendMessage(chat_id,"OFF")
+
+botid="dsad"
+bot=telepot.Bot(botid)
+bot.message_loop(handle)
+try:
+    while True:
+        sleep(1)
+except KeyboardInterrupt:
+    print("Program Interrupted")
+except :
+    print("pgram stoped")
+finally:
+    GPIO.cleanup()
+    sys.exit
+
+
+
